@@ -1,0 +1,22 @@
+/* Add some hover effect to make the links stand out on hover */
+.hover-effect:hover {
+    background-color: #343a40; /* Dark background on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    transition: all 0.3s ease-in-out;
+}
+
+
+/* Add some additional padding and rounded corners for better appearance */
+.components .btn {
+    border-radius: 12px; /* Rounded corners */
+}
+
+/* Optional: Add some subtle transitions to icons */
+.components .btn i {
+    transition: transform 0.3s ease;
+}
+
+.components .btn:hover i {
+    transform: rotate(15deg); /* Slight rotation effect for the icons on hover */
+}
+

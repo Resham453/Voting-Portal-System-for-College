@@ -1,0 +1,61 @@
+<!-- home.html -->
+{% extends 'admin/base.html' %} <!-- Inherit from base.html -->
+
+{% block title %}Admin Dashboard {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/votingResult.css') }}">{% endblock %}
+
+
+
+{% block content %}
+<!-- <input type="hidden" name="" value="{{results}}" id="voteResult" style="width: 100%"> -->
+<input type="hidden" name="" value="{{allElectionRecords}}" id="electionList" style="width: 100%">
+<input type="hidden" name=""value="{{mappingUserList}}" id="mappingUserList">
+
+<!-- <p>{{electionDetails}}</p> -->
+    <div class="container mt-5 row">
+     
+       
+        <h2 class="mb-4">Voting Results</h2>
+        <div class="form-group col-5">
+            <label for="electionSelect">Select Election</label>
+            <select class="form-control" id="electionSelect">
+                <option value="0">Select a Election</option>
+                {% for election in allElectionRecords %}
+                <option value="{{election[0]}}" electionStatus="{{election[5]}}" finalStatus="{{election[-1]}}">{{election[1]}} ({{election[6]}})</option>
+                {% endfor %}
+
+
+                <!-- Add options dynamically here -->
+            </select>
+        </div>
+        <div class="col-1"></div>
+
+        <div class="form-group col-5">
+            <label for="positionSelect">Select Position</label>
+            <select disabled  class="form-control" id="positionSelect">
+                
+                
+            
+                <!-- Add options dynamically here -->
+            </select>
+        </div>
+        <table class="table table-bordered mt-4" id="resultsTable" >
+            <thead>
+                <tr>
+                    <th>Candidate Name</th>
+                    <th>Votes Received</th>
+                    <th>Election Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Add rows dynamically here -->
+            </tbody>
+        </table>
+    </div>
+    {% endblock %}
+
+    {% block Scripts %}
+        <script type="module" src="{{url_for('static', filename='js/admin/votingResult.js')}}">    </script>
+        {% endblock %}

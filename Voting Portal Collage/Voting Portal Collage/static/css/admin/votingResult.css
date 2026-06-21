@@ -1,0 +1,10 @@
+.electedCandidate {
+    background-color: #a3ecb4; /* Light green background */
+    /* transition: background-color 0.3s ease, box-shadow 0.3s ease; */
+    /* box-shadow: 0 0 10px rgba(0, 128, 0, 0.2); Subtle green glow */
+}
+
+.electedCandidate:hover {
+    background-color: #c3e6cb; /* Slightly darker green on hover */
+    box-shadow: 0 0 5px rgba(0, 128, 0, 0.4); /* Enhanced glow on hover */
+}

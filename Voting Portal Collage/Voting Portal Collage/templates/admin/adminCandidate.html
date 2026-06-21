@@ -1,0 +1,218 @@
+<!-- home.html -->
+{% extends 'admin/base.html' %} <!-- Inherit from base.html -->
+
+{% block title %}Admin Dashboard {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/adminCandidate.css') }}">{% endblock %}
+
+
+
+{% block content %}
+<!-- Cards Row -->
+
+<!-- Chart -->
+<div class="row">
+    <div class="col-md-12">
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header row position-relative" id="headingOne">
+                    <h5 class="mb-0 col">
+                        <button class="btn" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false"
+                            aria-controls="collapseOne">
+                            Candidate List
+                        </button>
+                    </h5>
+
+                    <h5 class="mb-0 col-2">
+                        <button class="btn btn-success position-absolute top-20 end-0" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop">
+                            Approvals
+                        </button>
+
+                    </h5>
+
+                    <h5 class="mb-0 col-1">
+                        <button class="btn btn-danger position-absolute top-20 end-0" data-bs-toggle="modal"
+                            data-bs-target="#rejectCandidateModal">
+                            Rejections
+                        </button>
+
+                    </h5>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="approved-list">
+                            <h3 class="mt-4">Approved Candidates</h3>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Stream</th>
+                                        <th>CGPA</th>
+                                        <th>Position</th>
+                                        <th>Backlog</th>
+                                        <th>Document</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="approvedCandidatesList">
+                                    {% for i in range(actvCandidateList|length) %}
+                                    {% if actvCandidateList[i][12] == 'APRV' %}
+
+                                    <tr>
+                                        <td>{{ actvCandidateList[i][0] ~ ' ' ~ actvCandidateList[i][1] }}</td>
+                                        <td>{{ actvCandidateList[i][11]}}</td>
+                                        <td>{{ actvCandidateList[i][5]}}</td>
+                                        <td>{{ actvCandidateList[i][4]}}</td>
+                                        <td>{{ actvCandidateList[i][6]}}</td>
+                                        <td><a href="{{actvCandidateList[i][14]}}" target="_blank">Result</a></td>
+                                        <td></td>
+                                    </tr>
+
+                                    {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Approval List</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container mt-5">
+                                        <div class="row">
+                                            <h2 class="mb-4 col-7">Candidate Approval</h2>
+                                            <div class="col-4"></div>
+                                            <span class="tooltip-icon col-1 end-0 position-absolute"
+                                                data-toggle="tooltip" title="download approval candidate list"
+                                                userid="0" id="downloadApprovalList">
+                                                <i class="fas fa-download "></i>
+                                            </span>
+                                        </div>
+
+
+                                        <ul class="list-group" id="candidateListForPDF">
+                                            <input type="hidden" name="" value="{{actvCandidateList}}"
+                                                id="userDetailsListHidden">
+                                            {% for i in range(actvCandidateList|length) %}
+
+                                            {% if actvCandidateList[i][12] != 'APRV' and actvCandidateList[i][12] !='REJC' %}
+                                            <input type="hidden" name="" value="{{actvCandidateList[i]}}"
+                                                id="userDetailsHidden-{{actvCandidateList[i][3]}}">
+                                            <li class="list-group-item d-flex align-items-center checkbox-group ">
+                                                <input type="checkbox" id="candidate{{ i }}"
+                                                    class="mr-2 checkbox-input candidateList"
+                                                    applicationId="{{actvCandidateList[i][2]}}" email="{{actvCandidateList[i][15]}}">
+                                                <label for="candidate{{ i }}" class="checkbox">{{ actvCandidateList[i][0] ~
+                                                    ' ' ~ actvCandidateList[i][1] }}</label>
+                                                <!-- <label for="candidate{{ i }}" class="checkbox">{{ actvCandidateList[i] }}</label> -->
+                                                <span class="tooltip-icon candidateInfo" data-toggle="tooltip"
+                                                    userid="{{actvCandidateList[i][3]}}" status="{{actvCandidateList[i][12]}}"
+                                                    title="CGPA: {{actvCandidateList[i][5]}}, SGPA: {{actvCandidateList[i][9]}}, Backlog: {{actvCandidateList[i][6]}}, Current Year: {{actvCandidateList[i][10]}}, Stream: {{actvCandidateList[i][11]}}"
+                                                    >
+                                                    <i class="bi bi-info-circle"></i>
+                                                </span>
+                                                <input type="hidden" name="" value="{{actvCandidateList[i][13]}}"
+                                                    class="userDocumentHidden">
+                                                <span class="tooltip-icon userDocument">
+                                                    <a href="#" target="_blank"><i class="bi bi-file-pdf-fill"></i></a>
+                                                </span>
+                                                <span class="remove-candidate"
+                                                    applicationId="{{actvCandidateList[i][2]}}" email="{{actvCandidateList[i][15]}}">✖</span>
+                                            </li>
+                                            {% endif %}
+                                            {% endfor %}
+                                            
+                                        </ul>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-success mt-3"
+                                            id="approveCandidateButton">Approve</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade " id="rejectCandidateModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="rejectCandidateModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="rejectCandidateModalLabel">Rejections List</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container mt-5">
+                                    <div class="row">
+                                        <h2 class="mb-4 col-7">Candidate Rejection</h2>
+                                        <div class="col-4"></div>
+                                        <span class="tooltip-icon col-1 end-0 position-absolute"
+                                            data-toggle="tooltip" title="download approval candidate list"
+                                            userid="0" id="downloadRejectionList">
+                                            <i class="fas fa-download "></i>
+                                        </span>
+                                    </div>
+
+
+                                    <ol class="list-group" id="candidateListForPDF">
+                                        <input type="hidden" name="" value="{{rejcCandidateList}}"
+                                            id="userDetailsListHiddenREJC">
+                                        {% for i in range(rejcCandidateList|length) %}
+
+                                        {% if  rejcCandidateList[i][12] =='REJC' %}
+                                        <input type="hidden" name="" value="{{rejcCandidateList[i]}}"
+                                            id="userDetailsHidden-{{rejcCandidateList[i][3]}}">
+                                        <li class="list-group-item d-flex align-items-center checkbox-group ">
+                                            
+                                            <label for="candidate{{ i }}" class="checkbox">{{ rejcCandidateList[i][0] ~
+                                                ' ' ~ rejcCandidateList[i][1] }}</label> 
+                                            <span class="tooltip-icon candidateInfo" data-toggle="tooltip"
+                                                userid="{{rejcCandidateList[i][3]}}" status="{{rejcCandidateList[i][12]}}"
+                                                title="CGPA: {{rejcCandidateList[i][5]}}, SGPA: {{rejcCandidateList[i][9]}}, Backlog: {{rejcCandidateList[i][6]}}, Current Year: {{rejcCandidateList[i][10]}}, Stream: {{rejcCandidateList[i][11]}}"
+                                                >
+                                                <i class="bi bi-info-circle"></i>
+                                            </span>
+                                            <input type="hidden" name="" value="{{rejcCandidateList[i][13]}}"
+                                                class="userDocumentHidden">
+                                            <span class="tooltip-icon userDocument">
+                                                <a href="#" target="_blank"><i class="bi bi-file-pdf-fill"></i></a>
+                                            </span>
+                                            
+                                        </li>
+                                        {% endif %}
+                                        {% endfor %}
+                                       
+                                    </ol>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
+    <!-- <script src="/adminCandidate.js">    </script> -->
+
+
+    {% block Scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.18/jspdf.plugin.autotable.min.js"></script>
+
+
+    <script type="module" src="{{url_for('static', filename='js/admin/adminCandidate.js')}}">    </script>
+
+    {% endblock %}

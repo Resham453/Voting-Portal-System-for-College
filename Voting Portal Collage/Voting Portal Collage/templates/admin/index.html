@@ -1,0 +1,89 @@
+<!-- home.html -->
+{% extends 'admin/base.html' %} <!-- Inherit from base.html -->
+
+{% block title %}Admin Dashboard {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/adminDashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Cards Row -->
+
+
+<!-- Chart -->
+<div class="row" >
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body scrollable-container">
+                <input type="hidden" name="electionDetails" id="electionDetails" value="{{ electionDetails }}">
+               
+                {% if electionDetails|length == 0 %}
+                <div class="alert alert-info text-center" role="alert">
+                    No application data available to display.
+                </div>
+                {% else %}
+                <div class=" row">
+                    <h5 class="card-title col-3">Election Positions</h5>
+                    <div class="col-7"></div>
+                    <h5 class="mb-0  col-2">
+                        <a href="{{ url_for('admin.candidateList') }}" class="btn btn-outline-success">Check Applications</a>
+    
+                    </h5>
+                </div>
+              
+                <div class="container mt-5">
+                    <div class="row justify-content-center">
+                        {% for position in adminPositionList %}
+                        <div class="col-md-4 mb-4 d-flex">
+                            <div class="card flex-fill">
+                                <div class="card-body">
+                                    <!-- <h5 class="card-title">{{ position[1] }}</h5> -->
+                                    {% if position[1] == 'President' %}
+                                    <h5 class="card-title">🏛️ {{ position[1]  }}</h5>
+                                    {% elif position[1] == 'Vice President' %}
+                                    <h5 class="card-title">🤝 {{ position[1] }}</h5>
+                                    {% elif position[1] == 'General Secretary' %}
+                                    <h5 class="card-title">📝 {{ position[1] }}</h5>
+                                    {% elif position[1] == 'Lady Representative' %}
+                                    <h5 class="card-title">👩‍🦱 {{ position[1] }}</h5>
+                                    {% elif position[1] == 'University Representative' %}
+                                    <h5 class="card-title">🏫 {{ position[1] }}</h5>
+                                    {% elif position[1] == 'Techfest Secretary' %}
+                                    <h5 class="card-title">💻 {{ position[1] }}</h5>
+                                    {% elif position[1] == 'Cultural Secretary' %}
+                                    <h5 class="card-title">🎭 {{ position[1] }}</h5>
+                                    {% elif position[1] == 'Magazine/NSS Secretary' %}
+                                    <h5 class="card-title">📰 {{ position[1] }}</h5>
+                                    {% elif position[1] == 'Sports Secretary' %}
+                                    <h5 class="card-title">🏅 {{ position[1] }}</h5>
+                                    {% elif position[1] == 'TNP Representative' %}
+                                    <h5 class="card-title">📈 {{ position[1] }}</h5>
+                                    {% else %}
+                                    <h5 class="card-title">{{ position[1] }}</h5>
+                                    {% endif %}
+                                    <p class="card-text">Total Applications: {{ position[3] }}</p>
+                                    <p class="card-text">Approved Applications: {{ position[4] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    <!-- </div>
+                </div> -->
+                
+                
+                    <!-- <canvas id="voteChart"></canvas> -->
+                    {% endif %}
+                </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block Scripts %}
+<script type="module" src="{{url_for('static', filename='js/admin/adminDashboard.js')}}">    </script>
+{% endblock %}
+

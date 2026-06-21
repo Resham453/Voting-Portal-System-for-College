@@ -1,0 +1,151 @@
+<!-- home.html -->
+{% extends 'admin/base.html' %} <!-- Inherit from base.html -->
+
+{% block title %}Admin Dashboard {% endblock %}
+
+{% block css %} <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/adminPosition.css') }}"> {% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+
+        {% if electionDetails|length ==0  %}
+        <form class="row flex-row mb-4 ps-5 pt-2 ">
+            <div class="col-5 mb-3  align-items-end ">
+                <span class="tooltip-icon" data-toggle="tooltip" title="Election Name">
+                    <input type="text" class="form-control w-100 flex-grow" id="electionName"
+                        placeholder="Election Name">
+                </span>
+            </div>
+            <div class="col-3 mb-3   align-items-end">
+                <span class="tooltip-icon" data-toggle="tooltip" title="Election Date">
+                    <input type="datetime-local" class="form-control" id="electionDate" placeholder="electionDate">
+                </span>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-2 mb-3  d-flex align-items-end">
+                <!-- <span class="tooltip-icon" data-toggle="tooltip" > -->
+                <!-- <input type="text" disabled class=" btn btn-secondary" id="createElection" value="create" > -->
+
+                <button type="button" class="btn btn-light  align-items-end " id="createElection" data-bs-toggle="modal"
+                    data-bs-target="#positionsModal">Create</button>
+                <!-- </span> -->
+
+            </div>
+        </form>
+        {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            Election is already created
+        </div>
+        {% endif %}
+        <div id="accordion" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card">
+                <div class="card-header row position-relative" id="headingOne">
+                    <h5 class="mb-0 col">
+
+                        <button class="btn" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                            aria-controls="collapseOne">
+                            Positions List
+                        </button>
+                    </h5>
+
+
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="approved-list">
+                            <h3 class="mt-4">Positions</h3>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Eligiblity</th>
+                                        <th>Requests</th>
+                                        <th>Approved</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="electionPositionList">
+
+                                    {% for position in  positionList%}
+                                    <tr>
+                                        <td>{{position[1]}}</td>
+                                        <td></td>
+                                        <td>{{position[4]}}</td>
+                                        <td>{{position[3]}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade " id="positionsModal" data-bs-backdrop="static" role="dialog" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="positionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="positionLabel">Positions List</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container mt-2">
+                    {% for position in allPositionList %}
+                    <p>
+                        <input type="checkbox" id="test{{loop.index}}" class="positionListCheck"
+                        position="{{ position['position_name'] }}" value="{{position['position_id']}}"/>
+                        
+                        {% if position['position_name'] == 'President' %}
+                        <label for="test{{loop.index}}">🏛️ {{ position['position_name'] }}</label>
+                        {% elif position['position_name'] == 'Vice President' %}
+                        <label for="test{{loop.index}}">🤝 {{ position['position_name'] }}</label>
+                        {% elif position['position_name'] == 'General Secretary' %}
+                        <label for="test{{loop.index}}">📝 {{ position['position_name'] }}</label>
+                        {% elif position['position_name'] == 'Lady Representative' %}
+                        <label for="test{{loop.index}}">👩‍🦱 {{ position['position_name'] }}</label>
+                        {% elif position['position_name'] == 'University Representative' %}
+                        <label for="test{{loop.index}}">🏫 {{ position['position_name'] }}</label>
+                        {% elif position['position_name'] == 'Techfest Secretary' %}
+                        <label for="test{{loop.index}}">💻 {{ position['position_name'] }}</label>
+                        {% elif position['position_name'] == 'Cultural Secretary' %}
+                        <label for="test{{loop.index}}">🎭 {{ position['position_name'] }}</label>
+                        {% elif position['position_name'] == 'Magazine/NSS Secretary' %}
+                        <label for="test{{loop.index}}">📰 {{ position['position_name'] }}</label>
+                        {% elif position['position_name'] == 'Sports Secretary' %}
+                        <label for="test{{loop.index}}">🏅 {{ position['position_name'] }}</label>
+                        {% elif position['position_name'] == 'TNP Representative' %}
+                        <label for="test{{loop.index}}">📈 {{ position['position_name'] }}</label>
+                        {% else %}
+                        <label for="test{{loop.index}}">{{ position['position_name'] }}</label>
+                        {% endif %}
+                       
+                    </p>
+                    <!-- <p> -->
+                    <!-- <input type="checkbox" id="test{{loop.index}}" checked="checked" class="positionListCheck" /> -->
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success mt-3" id="approvePositionListButton">Approve</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block Scripts %}
+<script type="module" src="{{url_for('static', filename='js/admin/adminPosition.js')}}">    </script>
+{% endblock %}

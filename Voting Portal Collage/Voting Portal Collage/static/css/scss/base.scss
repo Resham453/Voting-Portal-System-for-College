@@ -1,0 +1,197 @@
+// Font CDN
+@import url("https://fonts.googleapis.com/css?family=Bebas+Neue|Sulphur+Point:300,400,700&display=swap");
+
+// Variable
+$nav_background: #424242;
+$nav_background_hover: #212121;
+$nav_menu: #212121;
+$nav_menu_hover: #111111;
+$red_velvet: #f50057;
+$blue_sky: #2196f3;
+$orange: #ffeb3b;
+$gradient_1: linear-gradient(
+  51deg,
+  rgba(131, 58, 180, 1) 0%,
+  rgba(253, 29, 29, 1) 50%,
+  rgba(252, 176, 69, 1) 100%
+);
+$sulfur: "Sulphur Point", sans-serif;
+$neue: "Bebas Neue", cursive;
+$ease_in_out: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+// Get for styling this nav
+// Universal
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: $sulfur;
+  background-color: $orange;
+  line-height: 1;
+}
+h1 {
+  font-family: $neue;
+  font-size: 60px;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+h2 {
+  font-size: 28px;
+  font-weight: lighten;
+  -webkit-font-smoothing: antialiased;
+}
+
+// Navbar Styling
+.navs {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100px;
+  backface-visibility: hidden;
+}
+.burger {
+  position: relative;
+  background: $nav_background;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: $ease_in_out;
+  z-index: 1;
+  &:hover {
+    background: $nav_background_hover;
+  }
+}
+.menu-open {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+.patty {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hamburger {
+  position: absolute;
+  top: 10px;
+  width: 30px;
+  height: 2px;
+  background: white;
+  transition: $ease_in_out;
+  &:before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    top: -10px;
+    left: 0;
+    background: white;
+    transition: $ease_in_out;
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    top: -20px;
+    left: 0;
+    background: white;
+    transition: $ease_in_out;
+  }
+}
+.menu-open:checked + .patty {
+  .hamburger {
+    top: -5px;
+    transform: rotate(-45deg);
+    &:before {
+      top: 0;
+      width: 0;
+    }
+    &:after {
+      top: 0;
+      transform: rotate(90deg);
+    }
+  }
+}
+.nav-menu {
+  position: relative;
+  width: 100px;
+  background: $nav_menu;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: $ease_in_out;
+  top: -500px;
+  .nav-list {
+    width: 100%;
+    list-style: none;
+    margin: 0 !important;
+    .list-menu {
+      width: 100%;
+      height: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: $ease_in_out;
+      &:hover {
+        background: $nav_menu_hover;
+      }
+      .icon-link {
+        width: 100%;
+        height: 100%;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: $ease_in_out;
+        &:hover {
+          color: white;
+        }
+      }
+      .icon-1 {
+        color: $red_velvet;
+      }
+      .icon-2 {
+        color: $orange;
+      }
+      .icon-3 {
+        color: $blue_sky;
+      }
+    }
+  }
+}
+.sidebar-open {
+  top: 0;
+}
+
+// Main Content Styling
+.content {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .article {
+    width: 100%;
+    height: auto;
+    padding: 2rem;
+    text-align: center;
+  }
+  .article-1 {
+    background: $gradient-1;
+    h1 {
+      color: white;
+    }
+    h2 {
+      color: white;
+    }
+  }
+}

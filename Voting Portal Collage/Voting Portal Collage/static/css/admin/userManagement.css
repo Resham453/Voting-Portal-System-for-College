@@ -1,0 +1,57 @@
+.inactiveRow  tr:hover{
+    background-color: #777474 !important;
+}
+
+.hover-effect-bright {
+    background-color: #bff6c1; /* Initial background color */
+    color: rgb(141, 141, 141); /* Initial text color */
+    padding: 10px 20px; /* Padding for the button */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text */
+    transition: all 0.3s ease-in-out; /* Smooth transition */
+}
+
+.hover-effect-bright:hover {
+    background-color: #5bc460; /* Slightly darker background on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* More pronounced shadow */
+    transform: scale(1.05); /* Slightly larger on hover */
+}
+
+#userTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#userTable th, #userTable td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+#userTable th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+#userTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#userTable tr:hover {
+    background-color: #f1f1f1;
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+}
+
+.inactiveRow  tr:hover{
+    background-color: #f9f9f9 !important;
+    color: #aaa !important
+}

@@ -1,0 +1,149 @@
+<!-- home.html -->
+{% extends 'admin/base.html' %} <!-- Inherit from base.html -->
+
+{% block title %}Admin Dashboard {% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/userManagement.css') }}">{% endblock %}
+
+
+
+{% block content %}
+<!-- Cards Row -->
+
+<div id="accordion" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+    <div class="card">
+        <div class="card-header row position-relative" id="headingOne">
+
+            <button class="col-2 btn hover-effect-bright ms-3" userid="0" id="addUserBtn" fileupload="none">
+                Add Users
+            </button>
+            <div class="col-7"></div>
+            <!-- <button class="col-2 btn hover-effect-bright ms-3" userid="0" id="uploadUserList" fileupload="yes">
+                Upload User Data
+            </button> -->
+
+
+        </div>
+
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                <div class="approved-list">
+                    <h3 class="mt-4"></h3>
+                    <table class="table" id="userTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Mobile No</th>
+                                <th>Role</th>
+                                <th>User Status</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="userList">
+                            {% for users in userList%}
+                            {% if users[6] == "INAC" %}
+                            <tr class="userListRow inactiveRow" userid="{{users[0]}}" fileupload="none" >
+                                <td>{{users[1] ~ " " ~ users[2]}}</td>
+                                <td>{{users[3]}}</td>
+                                <td>{{users[4]}}</td>
+                                <td>{{users[5]}}</td>
+                                <td status="{{users[5]}}">Inactive</td>
+                            </tr>
+                            {% else %}
+                            <tr class="userListRow" userid="{{users[0]}}" fileupload="none" >
+                                <td>{{users[1] ~ " " ~ users[2]}}</td>
+                                <td>{{users[3]}}</td>
+                                <td>{{users[4]}}</td>
+                                <td>{{users[5]}}</td>
+                                <td status="{{users[5]}}">Active</td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="modal fade " id="userModal" data-bs-backdrop="static" role="dialog" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="userLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userLabel">Add User</h5>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container mt-2">
+
+                            <form id="addUserForm">
+
+                                <div id="userFormAddUpdate">
+                                    <div class="mb-3">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="userFirstName" placeholder="First Name"
+                                            required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="userLastName" placeholder="Last Name"
+                                            required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email address</label>
+                                        <input type="email" class="form-control" id="userEmail"
+                                            placeholder="name@example.com" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="contactNo" class="form-label">Contact No</label>
+                                        <input type="text" class="form-control" id="userContactNo" placeholder="Contact No"
+                                            required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="userType" class="form-label">User Type</label>
+                                        <select class="form-select" id="userUserType" required>
+                                            <option value="" disabled selected>Select user type</option>
+                                            <option value="ADMIN">Admin</option>
+                                            <option value="USR">User</option>
+                                            <option value="SUP">Supervisor</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="userType" class="form-label">User Status</label>
+                                        <select class="form-select" id="userUserStatus" required>
+                                            <option value="ACTV">Active</option>
+                                            <option value="INAC">Inactive</option>
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+                                <div class="mb-3"></div>
+                                <div id="uploadUserData">
+                                    <label for="userFile" class="form-label">Upload User File</label>
+                                    <input class="form-control" type="file" id="userFile" required>
+                                </div>
+                                <div class="modal-footer mt-3">
+                                    <button type="button" class="btn btn-success mt-3"
+                                        id="submitUserForm">Submit</button>
+                                    <button type="reset" class="btn btn-secondary mt-3"
+                                        id="resetUserForm">Reset</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        {% endblock %}
+
+        {% block Scripts %}
+        <script type="module" src="{{url_for('static', filename='js/admin/userManagement.js')}}">    </script>
+        {% endblock %}

@@ -1,0 +1,233 @@
+<!-- home.html -->
+{% extends 'users/base.html' %} <!-- Inherit from base.html -->
+
+{% block title %}User Portal {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/votingResult.css') }}">{% endblock %}
+
+
+{% block content %}
+<!-- Hidden inputs for data storage -->
+<!-- <input type="hidden" name="" value="{{results}}" id="voteResult" style="width: 100%"> -->
+<input type="hidden" name="" value="{{allElectionRecords}}" id="electionList">
+<input type="hidden" name="" value="{{mappingUserList}}" id="mappingUserList">
+
+<!-- <p>{{electionDetails}}</p> -->
+<div class="voting-results-container">
+    <div class="header-section">
+        <h2>Election Results</h2>
+        <p class="subtitle">View election results</p>
+    </div>
+
+    <div class="filters-section">
+        <div class="filter-group">
+            <label for="electionSelect">Select Election</label>
+            <select class="custom-select" id="electionSelect">
+                <option value="0">Select a Election</option>
+                {% for election in allElectionRecords %}
+                <option value="{{election[0]}}" electionStatus="{{election[5]}}" finalStatus="{{election[-1]}}">{{election[1]}} ({{election[6]}})</option>
+                {% endfor %}
+                <!-- Add options dynamically here -->
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="positionSelect">Select Position</label>
+            <select disabled class="custom-select" id="positionSelect">
+                <!-- Add options dynamically here -->
+            </select>
+        </div>
+    </div>
+
+    <div class="results-section">
+        <div class="table-responsive">
+            <table class="results-table" id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>Candidate Name</th>
+                        <th>Votes Received</th>
+                        <th>Election Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Add rows dynamically here -->
+                </tbody>
+            </table>
+        </div>
+        <div id="noResultsMessage" class="no-results-message">
+            Select an election and position to view results
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom CSS for Voting Results Page */
+    :root {
+        --primary-color: #3f51b5;
+        --secondary-color: #f5f5f5;
+        --border-color: #e0e0e0;
+        --text-color: #333;
+        --accent-color: #ff4081;
+        --success-color: #4caf50;
+        --warning-color: #ff9800;
+    }
+
+    .voting-results-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-section {
+        margin-bottom: 2rem;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 1rem;
+    }
+
+    .header-section h2 {
+        color: var(--primary-color);
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+        color: #666;
+        font-size: 1rem;
+        margin-top: 0;
+    }
+
+    .filters-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .filter-group {
+        flex: 1;
+        min-width: 250px;
+    }
+
+    .filter-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-color);
+    }
+
+    .custom-select {
+        width: 100%;
+        /* padding: 0.75rem; */
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background-color: white;
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .custom-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.2);
+        outline: none;
+    }
+
+    .custom-select:disabled {
+        background-color: #f9f9f9;
+        cursor: not-allowed;
+    }
+
+    .results-section {
+        margin-top: 2rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .results-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .results-table thead {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .results-table th {
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    .results-table td {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .results-table tbody tr:hover {
+        background-color: rgba(63, 81, 181, 0.05);
+    }
+
+    .no-results-message {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+        font-style: italic;
+        display: block;
+    }
+
+    /* Status badges */
+    .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    .status-winner {
+        background-color: rgba(76, 175, 80, 0.2);
+        color: var(--success-color);
+    }
+
+    .status-runner-up {
+        background-color: rgba(255, 152, 0, 0.2);
+        color: var(--warning-color);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .voting-results-container {
+            padding: 1rem;
+        }
+
+        .filters-section {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .filter-group {
+            width: 100%;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 0.75rem;
+        }
+    }
+</style>
+
+
+
+{% endblock %}
+
+{% block Scripts %}
+<script type="module" src="{{url_for('static', filename='js/admin/votingResult.js')}}"></script>
+{% endblock %}

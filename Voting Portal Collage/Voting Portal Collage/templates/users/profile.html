@@ -1,0 +1,286 @@
+<!-- home.html -->
+{% extends 'users/base.html' %} <!-- Inherit from base.html -->
+
+{% block title %}User Profile - Voting Portal {% endblock %}
+{% block content %}
+
+    <div class="container mt-5  justify-content-center min-vh-80  align-items-center">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="cardbody">
+                    <div class="card-body text-center">
+                        <img src="{{url_for('static', filename='images/user.svg')}}" class="rounded-circle mb-3"
+                            id="userIcon" alt="User Profile Picture">
+                        <!-- <i class="bi bi-person-circle"></i> -->
+                        <h4 class="card-title">{{userRecord[1]~ ' ' ~userRecord[2]}} </h4>
+                        <p class="card-text">{{userRecord[3]}}</p>
+                        <p class="card-text">{{userRecord[8]}}</p>
+                        <p class="card-text">+91-{{userRecord[4]}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="cardbodyElection">
+                    <div class="cardHeader">
+                        {% if userElectionDetails is not none  %}
+                        <strong>Current Active Election </strong>
+                        {% else %}
+                        <strong>No Current Active Election </strong>
+
+                        {% endif %}
+                    </div>
+                    {% if userElectionDetails is not none  %}
+                    <div class="card-body">
+                        <h5 class="card-title"><strong>Election Name:</strong> {{userElectionDetails[0]}}</h5>
+                        <h5 class="card-title"></h5>
+                        <!-- <p class="card-text">Election Description</p> -->
+                        <p class="card-text"><strong>Posts:</strong>{{userElectionDetails[5]}}</p>
+                        <p class="card-text"><strong>Voting Date:</strong> {{userElectionDetails[1]}}</p>
+                        <!-- <p class="card-text"><strong>Voting End:</strong> 05-Jan-2024</p> -->
+                        <div class="row">
+                            {% if userElectionDetails[7] =='enroll' %}
+                            <button class="btn btn-primary buttons applyButton col-6 justify-content-center"
+                                id="registerCandidateBTN">Enroll as Candidate</button>
+                                <p class="card-text row bg-success" id="candidateRegistedAlready"><strong>Already Registered</strong> </p>
+
+                            {% endif %}
+
+
+                            <div class="col-1"></div>
+                            {% if userElectionDetails[6] == 'vote' %}
+                            <button  class="btn btn-success buttons voteButton col-4 justify-content-center" id="voteCandidateBTN">Vote
+                                Now</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <!-- <div class="card mt-4">
+                    <div class="card-header">
+                        Previous Elections
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">Election 1 - <span class="text-muted">Completed</span></li>
+                            <li class="list-group-item">Election 2 - <span class="text-muted">Completed</span></li>
+                            <li class="list-group-item">Election 3 - <span class="text-muted">Completed</span></li>
+                        </ul>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" value="{{filledApplication}}" id="alreadyRegistered">
+
+    <div class="modal fade " id="registerCandidate" data-bs-backdrop="static" role="dialog" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="userLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerCandidateLabel">Register Candidate</h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container mt-2">
+
+                        <form id="registerCandidateForm">
+
+                            <div id="registerCandidateFormAdd">
+                                <div class="row">
+                                    <div class="mb-3 form-group col-5">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="regCanFirstName"
+                                            placeholder="First Name" value="{{userRecord[1]}}" required disabled>
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div class="mb-3 form-group col-6">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="regCanLastName"
+                                            placeholder="Last Name" value="{{userRecord[2]}}" required disabled>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="mb-3 form-group col-5">
+                                        <label for="email" class="form-label">Email address</label>
+                                        <input type="email" class="form-control" id="regCanEmail"
+                                            value="{{userRecord[3]}}" placeholder="name@example.com" required disabled>
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div class="mb-3 form-group col-6">
+                                        <label for="contactNo" class="form-label">Contact No</label>
+                                        <input type="text" class="form-control" id="regContactNo"
+                                            placeholder="Contact No" value="{{userRecord[4]}}" required disabled>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-3 form-group col-5">
+                                        <label for="regCanSGPA" class="form-label">Last Semester SGPA</label>
+                                        <input type="text" class="form-control" id="regCanSGPA" placeholder="SGPA"
+                                            required>
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div class="mb-3 form-group col-6">
+                                        <label for="regCanCGPA" class="form-label">Last Year CGPA</label>
+                                        <input type="text" class="form-control" id="regCanCGPA" placeholder="CGPA"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-group mb-3 col-5">
+                                        <!-- <label for="regCanACADYear" class="form-label"></label> -->
+
+                                        <select class="custom-select " id="regCanACADYear">
+                                            <option value="" selected>Select Academic Year</option>
+                                            <option value="1st">First Year</option>
+                                            <option value="2nd">Second Year</option>
+                                            <option value="3rd">Third Year</option>
+                                            <option value="4th">Fourth Year</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div class="input-group mb-3 col-6">
+                                        <!-- <label for="regCanStream" class="form-label">Current Stream</label> -->
+
+                                        <select class="custom-select" id="regCanStream" required>
+                                            <option value="" disabled selected>Select Stream</option>
+                                            <option value="MECH"> Mechanical Stream </option>
+                                            <option value="AIML"> AIML Stream</option>
+                                            <option value="CS"> Computer Science Stream </option>
+                                            <option value="ENTC"> ENTC Stream</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="mb-3 form-group col-5">
+                                        <label for="regCanBlacklogCount" class="form-label">Current Backlog
+                                            Count</label>
+                                        <input type="text" class="form-control" id="regCanBlacklogCount"
+                                            placeholder="Current Backlog Count">
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div class="mb-3 form-group col-6">
+                                        <label for="regCanBlacklogSubject" class="form-label">Backlog Subjects</label>
+                                        <input type="text" class="form-control" id="regCanBlacklogSubject"
+                                            placeholder="Current Backlog Subject">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="input-group mb-3 col-5">
+                                        <!-- <label for="regCanACADYear" class="form-label"></label> -->
+
+                                        <select class="custom-select " id="regCanElection">
+                                            <option value="" selected>Select Election</option>
+                                            <option value="{{userElectionDetails[4]}}">{{userElectionDetails[0]}}</option>
+                                            <!-- <option value="2nd">Second Year</option>
+                                            <option value="3rd">Third Year</option>
+                                            <option value="4th">Fourth Year</option> -->
+                                        </select>
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div class="input-group mb-3 col-6">
+                                        <!-- <label for="regCanStream" class="form-label">Current Stream</label> -->
+
+                                        <select class="custom-select" id="regCanElectionPosition" required>
+                                            <option value="" disabled selected>Select Position</option>
+                                            <!--  -->
+                                            {% set position_names = userElectionDetails[2] %}
+                                            {% set position_ids = userElectionDetails[3]%}
+                                            
+                                            {% for i in range(position_names|length) %}
+                                                <option value="{{ position_ids[i] }}">{{ position_names[i] }}</option>
+                                            {% endfor %}
+                                            <!-- <option value="MECH"> Mechanical Stream </option>
+                                            <option value="AIMS"> AIML Stream</option>
+                                            <option value="CS"> Computer Science Stream </option>
+                                            <option value="ENTC"> ENTC Stream</option> -->
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="mb-3"></div>
+
+                                <div class="input-group mb-3 p-2">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input New markSheet" id="marksheet-{{user_name}}-{{userRecord[0]}}">
+                                        <label class="custom-file-label" for="marksheet">Upload Last Year Marksheet</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="modal-footer mt-3">
+                                <button type="button" class="btn btn-success mt-3" id="submitRegCanForm" userid="{{userRecord[0]}}">Submit</button>
+                                <button type="reset" class="btn btn-secondary mt-3" id="resetRegCanForm">Reset</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade " id="castVote" data-bs-backdrop="static" role="dialog" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="userLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="castVoteLabel">Vote {{userElectionDetails[0]}}</h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container mt-2">
+
+                        <form id="castVoteForm">
+                                
+                            <div class="row">
+                                <div class="input-group mb-3 col-5">
+                                    <!-- <label for="regCanStream" class="form-label">Current Stream</label> -->
+
+                                    <select class="custom-select" id="votePosition" required>
+                                        <option value="" disabled selected>Select Position</option>
+                                        <!--  -->
+                                        {% set position_names = userElectionDetails[2] %}
+                                        {% set position_ids = userElectionDetails[3]%}
+                                        
+                                        {% for i in range(position_names|length) %}
+                                            <option value="{{ position_ids[i] }}">{{ position_names[i] }}</option>
+                                        {% endfor %}
+                             
+                                    </select>
+                                </div>
+                                <div class="col-1"></div>
+                                <div class="input-group mb-3 col-6">
+                                    <!-- <label for="regCanStream" class="form-label">Current Stream</label> -->
+
+                                    <select class="custom-select" id="voteCandidate" required>
+                                        <option value="" disabled selected>Select Candidate</option>                                     
+                             
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer mt-3">
+                                <button type="button" class="btn btn-success mt-3" id="submitVote" electionId="{{userElectionDetails[4]}}" userId="{{userRecord[0]}}">Vote</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+
+    {% block Scripts %}
+    <script type="module" src="{{url_for('static', filename='js/users/profile.js')}}">    </script>
+    {% endblock %}   
